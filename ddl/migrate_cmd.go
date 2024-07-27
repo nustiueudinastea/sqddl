@@ -429,7 +429,7 @@ func (cmd *MigrateCmd) runWithRetry(conn *sql.Conn, queue []migration) error {
 				row[0] = m.filename  // filename
 				row[1] = m.checksum  // checksum
 				row[2] = m.startedAt // started_at
-				if cmd.Dialect == DialectSQLite && m.startedAt.Valid {
+				if (cmd.Dialect == DialectSQLite || cmd.Dialect == DialectMySQL) && m.startedAt.Valid {
 					row[2] = m.startedAt.Time.UTC().Format("2006-01-02 15:04:05")
 				}
 				row[3] = m.timeTakenNs // time_taken_ns
@@ -546,7 +546,7 @@ func (cmd *MigrateCmd) run(conn *sql.Conn, migrations []migration) (stoppedAt in
 			row[0] = m.filename
 			row[1] = m.checksum
 			row[2] = m.startedAt
-			if cmd.Dialect == DialectSQLite && m.startedAt.Valid {
+			if (cmd.Dialect == DialectSQLite || cmd.Dialect == DialectMySQL) && m.startedAt.Valid {
 				row[2] = m.startedAt.Time.UTC().Format("2006-01-02 15:04:05")
 			}
 			row[3] = m.timeTakenNs
